@@ -11,6 +11,6 @@ def read_csv(filename):
             if p<0.8:
                 print(sub,obj,rel)
             else:
-                print("wrong_main_2232")
+                print("wrong_main_0603")
 if __name__ == '__main__':
     read_csv('bacteria_bd_disease_1.csv')
