@@ -26,11 +26,11 @@ def read_csv(filename):
                 else:
                     tn = tn + 1
         print(filename, "tp, fn, fp, tn:",tp, fn, fp, tn)
-        # calculating the p,r,f1
-        # p = tp / (tp + fp)
-        # r = tp / (tp + fn)
-        # f1 = 2 * p * r / (p + r)
-        # print(filename, "p,r,f:",p,r,f1)
+        calculating the p,r,f1
+        p = tp / (tp + fp)
+        r = tp / (tp + fn)
+        f1 = 2 * p * r / (p + r)
+        print(filename, "p,r,f:",p,r,f1)
             
 if __name__ == '__main__':
     path = "MDR_prediction_results"
