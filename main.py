@@ -9,6 +9,7 @@ def read_csv(filename):
     with open(filename,'r', encoding='utf-8') as file:
         cf = csv.reader(file)
 
+        # drawing network picture
         col_nodes_1, col_nodes_2 = [], []
         edge_true, edge_pred = [], []
 
@@ -17,7 +18,7 @@ def read_csv(filename):
         # auc
         y_true, y_pred = [], []
         for r in cf:
-
+            # new template tuple
             temp_true, temp_pred = (), ()
 
             sub = r[2]
@@ -29,17 +30,22 @@ def read_csv(filename):
 
             # setting a positive critical point
             critical_point = 0.5
+
             if rel == 'pos':
+
                 y_true.append(1)
+
                 temp_true = (sub,obj)
-                
                 edge_true.append(tuple(temp_true))
                 
                 # calculating the cunfusion matrix
                 if p > critical_point:
+
                     y_true.append(0)
+
                     temp_pred = (sub,obj)
                     edge_pred.append(tuple(temp_pred))
+
                     tp = tp + 1
                 else:
                     fn = fn + 1
@@ -56,6 +62,7 @@ def read_csv(filename):
         # print(nodes)
         # print("edge_true:",edge_true)
         # print("edge_pred:",edge_pred)
+    
     draw_net(nodes,edge_true)
         
         # print(filename, "tp, fn, fp, tn:",tp, fn, fp, tn)
