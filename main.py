@@ -59,11 +59,8 @@ def read_csv(filename):
             col_nodes_2.append(obj)
         nodes = col_nodes_1 + col_nodes_2
         nodes = set(nodes)
-        # print(nodes)
-        # print("edge_true:",edge_true)
-        # print("edge_pred:",edge_pred)
     
-    draw_net(nodes,edge_true)
+    # draw_net(nodes,edge_true)
         
         # print(filename, "tp, fn, fp, tn:",tp, fn, fp, tn)
 
@@ -81,6 +78,34 @@ def read_csv(filename):
         # f1 = 2 * p * r / (p + r)
         # print(filename, "p,r,f:",p,r,f1)
 
+def calculate_degree(filename):
+    with open(filename,'r', encoding='utf-8') as file:
+        cf = csv.reader(file)
+
+        net = {}
+
+        for r in cf:
+            sub = r[2]
+            obj = r[5]
+            p = float(r[6])
+            rel = r[7]
+
+            critical_point = 0.5
+
+            # calculate the degree of nodes in tf graph
+            if rel == 'pos' and p < critical_point:
+                if sub not in net.keys():
+                    net[sub] = 1
+                else:
+                    net[sub] = net[sub] +1
+                
+                if obj not in net:
+                    net[obj] = 1
+                else:
+                    net[obj] = net[obj] +1
+        net_sorted_values = sorted(net.items(),key = lambda x:x[1],reverse = True)
+        print("fn",net_sorted_values)
+
         
 def draw_net(node,edge):
     
@@ -93,7 +118,6 @@ def draw_net(node,edge):
     plt.savefig('net_example.jpg')
             
 if __name__ == '__main__':
-    read_csv("MDR_prediction_results"+"/"+"bacteria_bd_disease_1.csv")
     # path = "MDR_prediction_results"
     # files = os.listdir(path)
     # for file in files:
@@ -101,4 +125,8 @@ if __name__ == '__main__':
     #         filename = path + "/" + file
     #         # print(filename)
     #         read_csv(filename)
+
+    # read_csv("MDR_prediction_results"+"/"+"bacteria_bd_disease_1.csv")
+   
+    calculate_degree("MDR_prediction_results"+"/"+"bacteria_bd_disease_1.csv")
 
