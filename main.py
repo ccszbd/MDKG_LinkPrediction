@@ -82,7 +82,7 @@ def calculate_degree(filename):
     with open(filename,'r', encoding='utf-8') as file:
         cf = csv.reader(file)
 
-        net = {}
+        net_true, net_pred = {}, {}
 
         for r in cf:
             sub = r[2]
@@ -92,19 +92,52 @@ def calculate_degree(filename):
 
             critical_point = 0.5
 
-            # calculate the degree of nodes in tf graph
-            if rel == 'pos' and p < critical_point:
-                if sub not in net.keys():
-                    net[sub] = 1
+            # calculate the degree of nodes in true and pred graph
+            if rel == 'pos':
+                if sub not in net_true.keys():
+                    net_true[sub] = 1
                 else:
-                    net[sub] = net[sub] +1
+                    net_true[sub] = net_true[sub] +1
                 
-                if obj not in net:
-                    net[obj] = 1
+                if obj not in net_true.keys():
+                    net_true[obj] = 1
                 else:
-                    net[obj] = net[obj] +1
-        net_sorted_values = sorted(net.items(),key = lambda x:x[1],reverse = True)
-        print("fn",net_sorted_values)
+                    net_true[obj] = net_true[obj] +1
+                
+            elif p > critical_point:
+                if sub not in net_pred.keys():
+                    net_pred[sub] = 1
+                else:
+                    net_pred[sub] = net_pred[sub] +1
+                
+                if obj not in net_pred.keys():
+                    net_pred[obj] = 1
+                else:
+                    net_pred[obj] = net_pred[obj] +1
+
+        # net_sorted_values = sorted(net.items(),key = lambda x:x[1],reverse = True)
+
+
+        # calculating the degree of nodes
+        degree_true, degree_pred = {}, {}
+
+        for value in net_true.values():
+            if value not in degree_true.keys():
+                degree_true[value] = 1
+            else:
+                degree_true[value] = degree_true[value] + 1
+        degree_true_sorted = sorted(degree_true.items())
+
+        for value in net_pred.values():
+            if value not in degree_pred.keys():
+                degree_pred[value] = 1
+            else:
+                degree_pred[value] = degree_pred[value] + 1
+        degree_pred_sorted = sorted(degree_pred.items())
+        print(filename,"nodes degree true:",degree_true_sorted)
+        print(filename,"nodes degree pred:",degree_pred_sorted)
+
+        # print(filename,"tp",net_sorted_values)
 
         
 def draw_net(node,edge):
@@ -118,15 +151,17 @@ def draw_net(node,edge):
     plt.savefig('net_example.jpg')
             
 if __name__ == '__main__':
-    # path = "MDR_prediction_results"
-    # files = os.listdir(path)
-    # for file in files:
-    #     if not os.path.isdir(file):
-    #         filename = path + "/" + file
-    #         # print(filename)
-    #         read_csv(filename)
+    path = "MDR_prediction_results"
+    files = os.listdir(path)
+    for file in files:
+        if not os.path.isdir(file):
+            filename = path + "/" + file
+            # print(filename)
+            # read_csv(filename)
+            calculate_degree(filename)
 
     # read_csv("MDR_prediction_results"+"/"+"bacteria_bd_disease_1.csv")
    
-    calculate_degree("MDR_prediction_results"+"/"+"bacteria_bd_disease_1.csv")
+    # calculate_degree("MDR_prediction_results"+"/"+"reaction_rc_compound_1.csv")
+    # calculate_degree("MDR_prediction_results"+"/"+"disease_dc_compound_1.csv")
 
